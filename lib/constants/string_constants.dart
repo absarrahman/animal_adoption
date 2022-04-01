@@ -1,6 +1,6 @@
 class RoleConstants {
-  static const ROLE_GONNA_ADOPT_USER = "gonnaAdoptUser";
-  static const ROLE_ADOPT_POST_PET_USER = "adoptPostPetUser";
+  static const roleGonnAdoptUser = "gonnaAdoptUser";
+  static const roleAdoptPostPetUser = "adoptPostPetUser";
 }
 
 class ModelConstants {

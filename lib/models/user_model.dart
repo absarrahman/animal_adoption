@@ -15,7 +15,7 @@ class UserModel {
     this.name,
     this.email,
     this.rating = 0.0,
-    this.role = RoleConstants.ROLE_GONNA_ADOPT_USER,
+    this.role = RoleConstants.roleGonnAdoptUser,
     this.phoneNumber,
     this.nid,
   });
