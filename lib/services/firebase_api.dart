@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseAPI {
-  static final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  static final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   static final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
   // Sign in
@@ -14,7 +14,7 @@ class FirebaseAPI {
   static Future<UserModel?> signIn({required String email, required String password, required String collectionPath}) async {
     UserModel? userModel;
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(email: email.trim(), password: password.trim()).then((result) async {
+      await firebaseAuth.signInWithEmailAndPassword(email: email.trim(), password: password.trim()).then((result) async {
         String _uId = result.user!.uid;
         userModel = await _setUserModel(uID: _uId, collectionPath: collectionPath);
       });
@@ -30,7 +30,7 @@ class FirebaseAPI {
   static Future<UserModel?> signUp({required Map<String, dynamic> userJSON, required String collectionPath}) async {
     UserModel? _userModel;
     try {
-      await _firebaseAuth
+      await firebaseAuth
           .createUserWithEmailAndPassword(email: userJSON[ModelConstants.email], password: userJSON[ModelConstants.userPassword])
           .then((result) async {
         String _uID = result.user!.uid;
@@ -47,7 +47,7 @@ class FirebaseAPI {
   //Sign out
 
   static Future<void> signOut() async {
-    await _firebaseAuth.signOut();
+    await firebaseAuth.signOut();
   }
 
   static Future<UserModel?> _setUserModel({required String uID, required String collectionPath}) async {
