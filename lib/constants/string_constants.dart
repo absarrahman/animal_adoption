@@ -12,6 +12,8 @@ class ModelConstants {
   static const userRating = "rating";
   static const userPhoneNumber = "phoneNumber";
   static const userPassword = "password";
+  static const userHouseAddress = "houseAddress";
+  static const username = "username";
 }
 
 class FireStoreConstants {

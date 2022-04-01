@@ -7,14 +7,24 @@ import 'package:get/get.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //await Firebase.initializeApp();
+  await Firebase.initializeApp(
+      options: const FirebaseOptions(
+          apiKey: "AIzaSyDUqqUUVXNoL0Nsg2VrKuLhyUFRCs99wQg",
+          appId: "1:706505452444:web:570882697b4363b1d33659",
+          messagingSenderId: "706505452444",
+          projectId: "animal-adoption-platform"));
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
-  final Future<FirebaseApp> _initialize = Firebase.initializeApp();
+  final Future<FirebaseApp> _initialize = Firebase.initializeApp(
+      options: const FirebaseOptions(
+          apiKey: "AIzaSyDUqqUUVXNoL0Nsg2VrKuLhyUFRCs99wQg",
+          appId: "1:706505452444:web:570882697b4363b1d33659",
+          messagingSenderId: "706505452444",
+          projectId: "animal-adoption-platform"));
 
   // This widget is the root of your application.
   @override
