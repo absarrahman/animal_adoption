@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 class CommonWidgets {
   static loadingWidget() {
-    Get.defaultDialog(content: const CircularProgressIndicator(), barrierDismissible: false, title: 'Loading');
+    Get.defaultDialog(content: const CircularProgressIndicator.adaptive(), barrierDismissible: false, title: 'Loading');
   }
 
   static dismissLoadingWidget() {
