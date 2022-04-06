@@ -20,8 +20,8 @@ class FirebaseAPI {
       });
       log("Successfully signed in");
       return userModel;
-    } catch (e) {
-      log("Something went wrong ${e.toString()}");
+    } on FirebaseException catch (e) {
+      log("Something went wrong during sign in ${e.message}");
       return null;
     }
   }
@@ -39,8 +39,8 @@ class FirebaseAPI {
       });
       log("Successfully registered");
       return _userModel;
-    } catch (e) {
-      log("Failed to signup ${e.toString()}");
+    } on FirebaseException catch (e) {
+      log("Failed to signup ${e.message}");
       return null;
     }
   }

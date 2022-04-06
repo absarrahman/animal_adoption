@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:animal_adoption/constants/string_constants.dart';
 import 'package:animal_adoption/services/firebase_api.dart';
+import 'package:animal_adoption/views/auth/login_view.dart';
 import 'package:animal_adoption/views/home.dart';
+import 'package:animal_adoption/views/widgets/common.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:get/get.dart";
 
@@ -13,10 +17,10 @@ class AuthController extends GetxController {
   Rx<String> userName = "".obs;
   Rx<String> password = "".obs;
   Rx<String> houseAddress = "".obs;
-  Rx<String> role = RoleConstants.roleAdoptPostPetUser.obs;
+  Rx<String> role = RoleConstants.roleMaps[RoleConstants.roleAdoptPostPetUser]!.obs;
   Rx<String> nid = "".obs;
   Rx<String> phoneNumber = "".obs;
-  Rx<UserModel> userModel = UserModel().obs;
+  Rx<UserModel?> userModel = UserModel().obs;
   late Rx<User?> firebaseUser;
   var isLoggedIn = false.obs;
 
@@ -30,35 +34,50 @@ class AuthController extends GetxController {
 
   void trackAuthState(User? user) async {
     if (user != null) {
-      await FirebaseAPI.setUserModel(collectionPath: FireStoreConstants.userCollection, uID: user.uid);
+      userModel.value = await FirebaseAPI.setUserModel(collectionPath: FireStoreConstants.userCollection, uID: user.uid);
       isLoggedIn.value = true;
     }
   }
 
-  void signUp() async {
-    FirebaseAPI.signUp(
-      userJSON: {
-        ModelConstants.email: email.value,
-        ModelConstants.role: role.value,
-        ModelConstants.name: name.value,
-        ModelConstants.userPhoneNumber: phoneNumber.value,
-        ModelConstants.userNID: nid.value,
-        ModelConstants.userHouseAddress: houseAddress.value,
-        ModelConstants.username: userName.value,
-      },
-      password: password.value,
-      collectionPath: FireStoreConstants.userCollection,
-    );
+  Future<void> signUp() async {
+    try {
+      userModel.value = await FirebaseAPI.signUp(
+        userJSON: {
+          ModelConstants.email: email.value,
+          ModelConstants.role: RoleConstants.roleMaps[role.value],
+          ModelConstants.name: name.value,
+          ModelConstants.userPhoneNumber: phoneNumber.value,
+          ModelConstants.userNID: nid.value,
+          ModelConstants.userHouseAddress: houseAddress.value,
+          ModelConstants.username: userName.value,
+        },
+        password: password.value,
+        collectionPath: FireStoreConstants.userCollection,
+      );
+    } catch (e) {
+      CommonWidgets.dismissLoadingWidget();
+      Get.snackbar("Failed to signup", "Something went wrong");
+      log(e.toString());
+    }
     _clearStrings();
-    Get.toNamed(HomeView.id);
+    Get.offAllNamed(HomeView.id);
   }
 
-  void signIn() async {
-    FirebaseAPI.signIn(email: email.value, password: password.value, collectionPath: FireStoreConstants.userCollection);
+  Future<void> signIn() async {
+    try {
+      userModel.value = await FirebaseAPI.signIn(email: email.value, password: password.value, collectionPath: FireStoreConstants.userCollection);
+    } catch (e) {
+      // Remove the loader
+      CommonWidgets.dismissLoadingWidget();
+      Get.snackbar("Failed to login", "Password wrong or the user does not exist");
+      log(e.toString());
+    }
+    //log("sign in function ${userModel.value}");
+    Get.offAllNamed(HomeView.id);
     _clearStrings();
   }
 
-  void signOut() async {
+  Future<void> signOut() async {
     FirebaseAPI.signOut();
     isLoggedIn.value = false;
   }

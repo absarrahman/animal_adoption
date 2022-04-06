@@ -1,6 +1,10 @@
 class RoleConstants {
   static const roleGonnAdoptUser = "gonnaAdoptUser";
   static const roleAdoptPostPetUser = "adoptPostPetUser";
+  static const roleMaps = {
+    roleAdoptPostPetUser: "Adopt a pet",
+    roleGonnAdoptUser: "Let someone else adopt your pet",
+  };
 }
 
 class ModelConstants {

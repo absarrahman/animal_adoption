@@ -1,4 +1,10 @@
+import 'dart:developer';
+
+import 'package:animal_adoption/controllers/auth_controller.dart';
+import 'package:animal_adoption/utils/responsive.dart';
+import 'package:animal_adoption/views/auth/login_view.dart';
 import 'package:animal_adoption/views/auth/register_view.dart';
+import 'package:animal_adoption/views/widgets/common.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,24 +14,63 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AuthController authController = AuthController.authController;
+    log("${authController.isLoggedIn.value}");
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         actions: [
-          ElevatedButton(
-            onPressed: () {
-              Get.toNamed(RegisterView.id);
-            },
-            child: const Text("Register View"),
-            style: ElevatedButton.styleFrom(
-              shape: const StadiumBorder(),
-            ),
-          )
+          const Spacer(
+            flex: 3,
+          ),
+          authController.isLoggedIn.value
+              ? ElevatedButton(
+                  onPressed: () async {
+                    CommonWidgets.loadingWidget();
+                    await authController.signOut();
+                    CommonWidgets.dismissLoadingWidget();
+                  },
+                  child: const Text("Logout"),
+                )
+              : Flexible(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        flex: 8,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Get.toNamed(LoginView.id);
+                          },
+                          child: const Text("Login"),
+                          style: ElevatedButton.styleFrom(
+                            shape: const StadiumBorder(),
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      Flexible(
+                        flex: 8,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Get.toNamed(RegisterView.id);
+                          },
+                          child: const Text("Join us"),
+                          style: ElevatedButton.styleFrom(
+                            shape: const StadiumBorder(),
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                    ],
+                  ),
+                ),
         ],
       ),
-      body: const Center(
-        child: Text("Hey"),
+      body: Center(
+        child: Text(
+            "Hey Login status: ${authController.isLoggedIn.value}, isPhone status: ${ResponsiveUtil.isMobile}, isDesktop status: ${ResponsiveUtil.isDesktop}"),
       ),
     );
   }
