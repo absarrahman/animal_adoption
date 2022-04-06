@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:animal_adoption/constants/string_constants.dart';
 import 'package:animal_adoption/services/firebase_api.dart';
-import 'package:animal_adoption/views/auth/login_view.dart';
 import 'package:animal_adoption/views/home.dart';
 import 'package:animal_adoption/views/widgets/common.dart';
 import 'package:firebase_auth/firebase_auth.dart';
