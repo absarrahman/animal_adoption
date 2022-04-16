@@ -76,10 +76,13 @@ class HomeView extends StatelessWidget {
           builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
             if (snapshot.hasData) {
               List adoptionPostList = snapshot.data!.docs.toList();
-              return ListView.builder(itemBuilder: ((context, index) {
-                var adoptionPost = adoptionPostList[index].data();
-                return Text(adoptionPost[ModelConstants.postDescription]);
-              }),itemCount: adoptionPostList.length,);
+              return ListView.builder(
+                itemBuilder: ((context, index) {
+                  var adoptionPost = adoptionPostList[index].data();
+                  return Text(adoptionPost[ModelConstants.postDescription]);
+                }),
+                itemCount: adoptionPostList.length,
+              );
             } else if (snapshot.hasError) {
               return const Text("Something went wrong");
             } else if (snapshot.connectionState == ConnectionState.waiting) {
