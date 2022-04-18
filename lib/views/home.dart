@@ -21,8 +21,27 @@ class HomeView extends StatelessWidget {
     AuthController authController = AuthController.authController;
     log("${authController.isLoggedIn.value}");
     return Scaffold(
+        drawer: authController.isLoggedIn.value
+            ? Drawer(
+                child: Column(
+                  children: const [
+                    Text("Children"),
+                  ],
+                ),
+              )
+            : null,
         appBar: AppBar(
           elevation: 0,
+          leading: Builder(
+            builder: (context) {
+              return IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              );
+            }
+          ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           actions: [
             const Spacer(

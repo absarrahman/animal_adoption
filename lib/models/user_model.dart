@@ -1,8 +1,7 @@
 import 'package:animal_adoption/constants/string_constants.dart';
-import 'package:animal_adoption/models/base_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class UserModel extends BaseModel{
+class UserModel {
   late String? name;
   late String? email;
   late double? rating;
@@ -11,9 +10,10 @@ class UserModel extends BaseModel{
   late String? phoneNumber;
   late String? houseAddress;
   late String? username;
+  late String? uuid;
 
   UserModel({
-    uuid,
+    this.uuid,
     this.name,
     this.email,
     this.rating = 0.0,

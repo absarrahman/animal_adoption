@@ -39,11 +39,12 @@ class AuthController extends GetxController {
   }
 
   Future<void> signUp() async {
+    log("ROLE IS ${role.value}");
     try {
       userModel.value = await FirebaseAPI.signUp(
         userJSON: {
           ModelConstants.email: email.value,
-          ModelConstants.role: RoleConstants.roleMaps[role.value],
+          ModelConstants.role: RoleConstants.roleMaps.keys.firstWhere((element) => RoleConstants.roleMaps[element] == role.value),
           ModelConstants.name: name.value,
           ModelConstants.userPhoneNumber: phoneNumber.value,
           ModelConstants.userNID: nid.value,
