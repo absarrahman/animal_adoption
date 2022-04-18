@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:animal_adoption/views/widgets/adoption_post_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -80,7 +81,7 @@ class HomeView extends StatelessWidget {
                 itemBuilder: ((context, index) {
                   // Per adoption post
                   var adoptionPost = adoptionPostList[index].data();
-                  
+
                   return FutureBuilder(
                       future: Future.wait([
                         //Get data from usercollection
@@ -95,7 +96,8 @@ class HomeView extends StatelessWidget {
                           return AdoptionPostWidget(
                             postDesciption: adoptionPost[ModelConstants.postDescription],
                             createdAt: adoptionPost[ModelConstants.createdAt],
-                            imageUrl: "https://media.istockphoto.com/photos/european-short-haired-cat-picture-id1072769156?k=20&m=1072769156&s=612x612&w=0&h=k6eFXtE7bpEmR2ns5p3qe_KYh098CVLMz4iKm5OuO6Y=",
+                            imageUrl:
+                                "https://media.istockphoto.com/photos/european-short-haired-cat-picture-id1072769156?k=20&m=1072769156&s=612x612&w=0&h=k6eFXtE7bpEmR2ns5p3qe_KYh098CVLMz4iKm5OuO6Y=",
                             postName: adoptionPost[ModelConstants.postName],
                             userName: snapshot.data![0][ModelConstants.username]!,
                           );
@@ -104,11 +106,12 @@ class HomeView extends StatelessWidget {
                         }
                       });
                 }),
-                itemCount: adoptionPostList.length,  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 500, //height
-                childAspectRatio: 3 / 2,
-                crossAxisSpacing: 120,
-                mainAxisSpacing: 20),
+                itemCount: adoptionPostList.length,
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 500, //height
+                    childAspectRatio: 3 / 2,
+                    crossAxisSpacing: 120,
+                    mainAxisSpacing: 20),
               );
             } else if (snapshot.hasError) {
               return const Text("Something went wrong");
@@ -119,38 +122,5 @@ class HomeView extends StatelessWidget {
             }
           },
         ));
-  }
-}
-
-class AdoptionPostWidget extends StatelessWidget {
-  final String imageUrl;
-  final int createdAt;
-  final String postDesciption;
-  final String postName;
-  final String userName;
-  const AdoptionPostWidget({
-    Key? key,
-    required this.imageUrl,
-    required this.createdAt,
-    required this.postDesciption,
-    required this.postName,
-    required this.userName,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      elevation: 5,
-      color: Colors.red,
-      child: Column(
-        children: [
-          Image.network(imageUrl,height: Get.width * 0.09, width: Get.width * 0.09,),
-          Text(postName),
-          Text(userName),
-          Text(postDesciption)
-        ],
-      ),
-    );
   }
 }
