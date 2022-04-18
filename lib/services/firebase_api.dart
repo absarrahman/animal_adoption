@@ -104,4 +104,10 @@ class FirebaseAPI {
       log("Failed to update ${e.toString()}");
     }
   }
+
+  // Get collection ref
+
+  static CollectionReference<Map<String, dynamic>> getCollectionRef({required String collectionPath}) {
+    return _fireStore.collection(collectionPath);
+  }
 }

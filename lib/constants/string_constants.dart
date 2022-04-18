@@ -18,6 +18,15 @@ class ModelConstants {
   static const userPassword = "password";
   static const userHouseAddress = "houseAddress";
   static const username = "username";
+  static const animalBreed = "animalBreed";
+  static const animalType = "animalType";
+  static const imageUrl = "imageUrl";
+  static const animalUuid = "animalUuid";
+  static const bookedUuid = "bookedUuid";
+  static const createdAt = "createdAt";
+  static const postDescription = "postDescription";
+  static const postName = "postName";
+  static const userUuid = "userUuid";
 }
 
 class FireStoreConstants {
