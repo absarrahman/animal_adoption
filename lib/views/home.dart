@@ -1,15 +1,15 @@
 import 'dart:developer';
 
-import 'package:animal_adoption/constants/string_constants.dart';
-import 'package:animal_adoption/controllers/auth_controller.dart';
-import 'package:animal_adoption/services/firebase_api.dart';
-import 'package:animal_adoption/utils/responsive.dart';
-import 'package:animal_adoption/views/auth/login_view.dart';
-import 'package:animal_adoption/views/auth/register_view.dart';
-import 'package:animal_adoption/views/widgets/common.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'package:animal_adoption/constants/string_constants.dart';
+import 'package:animal_adoption/controllers/auth_controller.dart';
+import 'package:animal_adoption/services/firebase_api.dart';
+import 'package:animal_adoption/views/auth/login_view.dart';
+import 'package:animal_adoption/views/auth/register_view.dart';
+import 'package:animal_adoption/views/widgets/common.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -76,12 +76,39 @@ class HomeView extends StatelessWidget {
           builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
             if (snapshot.hasData) {
               List adoptionPostList = snapshot.data!.docs.toList();
-              return ListView.builder(
+              return GridView.builder(
                 itemBuilder: ((context, index) {
+                  // Per adoption post
                   var adoptionPost = adoptionPostList[index].data();
-                  return Text(adoptionPost[ModelConstants.postDescription]);
+                  
+                  return FutureBuilder(
+                      future: Future.wait([
+                        //Get data from usercollection
+                        FirebaseAPI.getCollectionRef(collectionPath: FireStoreConstants.userCollection).doc(adoptionPost[ModelConstants.userUuid]).get(),
+                        // Get data from booked Collection
+                        //FirebaseAPI.getCollectionRef(collectionPath: FireStoreConstants.userCollection).doc(adoptionPost[ModelConstants.userUuid]).get()
+                      ]),
+                      builder: (context, AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const CircularProgressIndicator.adaptive();
+                        } else if (snapshot.hasData) {
+                          return AdoptionPostWidget(
+                            postDesciption: adoptionPost[ModelConstants.postDescription],
+                            createdAt: adoptionPost[ModelConstants.createdAt],
+                            imageUrl: "https://media.istockphoto.com/photos/european-short-haired-cat-picture-id1072769156?k=20&m=1072769156&s=612x612&w=0&h=k6eFXtE7bpEmR2ns5p3qe_KYh098CVLMz4iKm5OuO6Y=",
+                            postName: adoptionPost[ModelConstants.postName],
+                            userName: snapshot.data![0][ModelConstants.username]!,
+                          );
+                        } else {
+                          return const Text("Failed to retrieve data");
+                        }
+                      });
                 }),
-                itemCount: adoptionPostList.length,
+                itemCount: adoptionPostList.length,  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 500, //height
+                childAspectRatio: 3 / 2,
+                crossAxisSpacing: 120,
+                mainAxisSpacing: 20),
               );
             } else if (snapshot.hasError) {
               return const Text("Something went wrong");
@@ -92,5 +119,38 @@ class HomeView extends StatelessWidget {
             }
           },
         ));
+  }
+}
+
+class AdoptionPostWidget extends StatelessWidget {
+  final String imageUrl;
+  final int createdAt;
+  final String postDesciption;
+  final String postName;
+  final String userName;
+  const AdoptionPostWidget({
+    Key? key,
+    required this.imageUrl,
+    required this.createdAt,
+    required this.postDesciption,
+    required this.postName,
+    required this.userName,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      elevation: 5,
+      color: Colors.red,
+      child: Column(
+        children: [
+          Image.network(imageUrl,height: Get.width * 0.09, width: Get.width * 0.09,),
+          Text(postName),
+          Text(userName),
+          Text(postDesciption)
+        ],
+      ),
+    );
   }
 }
