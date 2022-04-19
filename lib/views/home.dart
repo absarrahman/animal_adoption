@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:animal_adoption/views/create_post.dart';
 import 'package:animal_adoption/views/widgets/adoption_post_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -150,8 +151,15 @@ class UserDrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Column(
-        children: const [
-          Text("Children"),
+        children: [
+          //For creating post
+          TextButton(
+            child: const Text("Create adoption post"),
+            onPressed: () {
+              log("Go to adoption post");
+              Get.toNamed(CreateAdoptionPostView.id);
+            },
+          ),
         ],
       ),
     );

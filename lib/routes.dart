@@ -1,5 +1,6 @@
 import 'package:animal_adoption/views/auth/login_view.dart';
 import 'package:animal_adoption/views/auth/register_view.dart';
+import 'package:animal_adoption/views/create_post.dart';
 import 'package:animal_adoption/views/home.dart';
 import 'package:get/route_manager.dart';
 
@@ -10,5 +11,6 @@ class AppRoutes {
     GetPage(name: HomeView.id, page: () => const HomeView()),
     GetPage(name: RegisterView.id, page: () => const RegisterView()),
     GetPage(name: LoginView.id, page: () => const LoginView()),
+    GetPage(name: CreateAdoptionPostView.id, page: () => const CreateAdoptionPostView()),
   ];
 }

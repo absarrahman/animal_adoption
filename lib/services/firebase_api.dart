@@ -1,13 +1,16 @@
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:animal_adoption/constants/string_constants.dart';
 import 'package:animal_adoption/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseAPI {
   static final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   static final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  static final FirebaseStorage _storage = FirebaseStorage.instance;
 
   // Sign in
 
@@ -109,5 +112,15 @@ class FirebaseAPI {
 
   static CollectionReference<Map<String, dynamic>> getCollectionRef({required String collectionPath}) {
     return _fireStore.collection(collectionPath);
+  }
+
+  // Upload file
+
+  static Future<void> uploadFile({required Uint8List bytes, required String fileName, required String refPath}) async {
+    try {
+      await _storage.ref("$refPath/$fileName").putData(bytes);
+    } catch (e) {
+      log("Error occurred $e");
+    }
   }
 }
