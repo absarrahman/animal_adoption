@@ -15,25 +15,41 @@ class CreateAdoptionPostView extends StatelessWidget {
     final PostController postController = Get.find<PostController>();
     return Scaffold(
       body: Center(
-        child: TextButton(
-            onPressed: () async {
-              final results = await FilePicker.platform.pickFiles(
-                allowMultiple: false,
-                type: FileType.image,
+        child: Column(
+          children: [
+            Obx(() {
+              return TextButton(
+                onPressed: () async {
+                  final results = await FilePicker.platform.pickFiles(
+                    allowMultiple: false,
+                    type: FileType.image,
+                  );
+
+                  if (results == null) {
+                    return;
+                  }
+                  final bytes = results.files.single.bytes;
+                  final fileName = results.files.single.name;
+                  postController.fileName.value = fileName;
+                  postController.imageBytes = bytes!;
+
+                  log("Bytes is $bytes");
+                  log("FileName is $fileName");
+                },
+                child: Text(postController.fileName.value.isEmpty ? "Select file" : postController.fileName.value),
               );
-
-              if (results == null) {
-                Get.dialog(const Text("Image not selected"));
-                return;
-              }
-              final bytes = results.files.single.bytes;
-              final fileName = results.files.single.name;
-
-              log("Bytes is $bytes");
-              log("FileName is $fileName");
-              postController.uploadImageFile(bytes: bytes!, fileName: fileName);
-            },
-            child: const Text("Upload")),
+            }),
+            TextButton(
+                onPressed: () async {
+                  if (postController.fileName.value.isEmpty) {
+                    Get.snackbar("Image not selected", "Please select an image before uploading");
+                  } else {
+                    await postController.uploadImageFile();
+                  }
+                },
+                child: const Text("Upload File")),
+          ],
+        ),
       ),
     );
   }

@@ -7,8 +7,11 @@ import 'package:get/get.dart';
 class PostController extends GetxController {
   static final PostController homeController = Get.find<PostController>();
 
-  Future<void> uploadImageFile({required Uint8List bytes, required String fileName}) async {
+  Rx<String> fileName = "".obs;
+  late Uint8List imageBytes;
+
+  Future<void> uploadImageFile() async {
     String userUUID = AuthController.authController.userModel.value!.uuid!;
-    await FirebaseAPI.uploadFile(bytes: bytes, fileName: fileName, refPath: "images/$userUUID");
+    await FirebaseAPI.uploadFile(bytes: imageBytes, fileName: fileName.value, refPath: "images/$userUUID");
   }
 }
