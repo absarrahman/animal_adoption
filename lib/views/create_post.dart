@@ -5,6 +5,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'home.dart';
+
 class CreateAdoptionPostView extends StatelessWidget {
   const CreateAdoptionPostView({Key? key}) : super(key: key);
 
@@ -45,6 +47,8 @@ class CreateAdoptionPostView extends StatelessWidget {
                     Get.snackbar("Image not selected", "Please select an image before uploading");
                   } else {
                     await postController.uploadImageFile();
+                    Get.snackbar("Congratulations", "Post created successfully");
+                    Get.offNamed(HomeView.id);
                   }
                 },
                 child: const Text("Upload File")),
