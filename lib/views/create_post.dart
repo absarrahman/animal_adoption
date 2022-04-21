@@ -51,7 +51,7 @@ class CreateAdoptionPostView extends StatelessWidget {
                     Get.offNamed(HomeView.id);
                   }
                 },
-                child: const Text("Upload File")),
+                child: const Text("Post adoption")),
           ],
         ),
       ),
