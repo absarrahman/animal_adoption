@@ -122,7 +122,7 @@ class HomeView extends StatelessWidget {
                                       ),
                                       Visibility(
                                           visible: isValidUser(adoptionPost, authController),
-                                          child: ElevatedButton(onPressed: () {}, child: const Text("BUTTON"))),
+                                          child: ElevatedButton(onPressed: () {}, child: const Text("Book Now"))),
                                     ],
                                   ),
                                 ));
@@ -161,7 +161,7 @@ class HomeView extends StatelessWidget {
   }
 
   bool isValidUser(adoptionPost, AuthController authController) {
-    return adoptionPost[ModelConstants.userUuid] != authController.userModel.value!.uuid && authController.isLoggedIn.value;
+    return adoptionPost[ModelConstants.userUuid] != authController.userModel.value!.uuid && authController.isLoggedIn.value && adoptionPost[ModelConstants.bookedUuid] == null;
   }
 }
 
