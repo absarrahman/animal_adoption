@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:animal_adoption/views/create_post.dart';
 import 'package:animal_adoption/views/widgets/adoption_post_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthController authController = AuthController.authController;
-    log("${authController.isLoggedIn.value}");
+    log("${authController.userModel.value!.username} ${authController.isLoggedIn.value}");
     return Obx(() {
       return Scaffold(
           drawer: authController.isLoggedIn.value ? const UserDrawerWidget() : null,
@@ -111,8 +112,7 @@ class HomeView extends StatelessWidget {
                             return AdoptionPostWidget(
                               postDesciption: adoptionPost[ModelConstants.postDescription],
                               createdAt: adoptionPost[ModelConstants.createdAt],
-                              imageUrl:
-                                  "https://media.istockphoto.com/photos/european-short-haired-cat-picture-id1072769156?k=20&m=1072769156&s=612x612&w=0&h=k6eFXtE7bpEmR2ns5p3qe_KYh098CVLMz4iKm5OuO6Y=",
+                              imageUrl: adoptionPost[ModelConstants.imageUrl],
                               postName: adoptionPost[ModelConstants.postName],
                               userName: snapshot.data![0][ModelConstants.username]!,
                             );
@@ -150,8 +150,15 @@ class UserDrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Column(
-        children: const [
-          Text("Children"),
+        children: [
+          //For creating post
+          TextButton(
+            child: const Text("Create adoption post"),
+            onPressed: () {
+              log("Go to adoption post");
+              Get.toNamed(CreateAdoptionPostView.id);
+            },
+          ),
         ],
       ),
     );

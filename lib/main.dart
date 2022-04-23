@@ -12,7 +12,8 @@ void main() async {
           apiKey: "AIzaSyDUqqUUVXNoL0Nsg2VrKuLhyUFRCs99wQg",
           appId: "1:706505452444:web:570882697b4363b1d33659",
           messagingSenderId: "706505452444",
-          projectId: "animal-adoption-platform"));
+          projectId: "animal-adoption-platform",
+          storageBucket: "animal-adoption-platform.appspot.com"));
   runApp(MyApp());
 }
 
@@ -21,10 +22,12 @@ class MyApp extends StatelessWidget {
 
   final Future<FirebaseApp> _initialize = Firebase.initializeApp(
       options: const FirebaseOptions(
-          apiKey: "AIzaSyDUqqUUVXNoL0Nsg2VrKuLhyUFRCs99wQg",
-          appId: "1:706505452444:web:570882697b4363b1d33659",
-          messagingSenderId: "706505452444",
-          projectId: "animal-adoption-platform"));
+    apiKey: "AIzaSyDUqqUUVXNoL0Nsg2VrKuLhyUFRCs99wQg",
+    appId: "1:706505452444:web:570882697b4363b1d33659",
+    messagingSenderId: "706505452444",
+    projectId: "animal-adoption-platform",
+    storageBucket: "animal-adoption-platform.appspot.com",
+  ));
 
   // This widget is the root of your application.
   @override
