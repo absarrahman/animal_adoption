@@ -20,7 +20,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthController authController = AuthController.authController;
-    log("${authController.userModel.value!.username}");
+    log("${authController.userModel.value!.username} ${authController.isLoggedIn.value}");
     return Obx(() {
       return Scaffold(
           drawer: authController.isLoggedIn.value ? const UserDrawerWidget() : null,

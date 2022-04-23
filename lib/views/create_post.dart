@@ -19,6 +19,24 @@ class CreateAdoptionPostView extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
+            // Post Name
+            TextField(
+              onChanged: (val) {
+                postController.postName.value = val;
+              },
+            ),
+            // Post description
+            TextField(
+              onChanged: (val) {
+                postController.postDescription.value = val;
+              },
+            ),
+            // Animal type
+            TextField(
+              onChanged: (val) {
+                postController.animalType.value = val;
+              },
+            ),
             Obx(() {
               return TextButton(
                 onPressed: () async {
@@ -45,8 +63,10 @@ class CreateAdoptionPostView extends StatelessWidget {
                 onPressed: () async {
                   if (postController.fileName.value.isEmpty) {
                     Get.snackbar("Image not selected", "Please select an image before uploading");
+                  } else if (postController.postDescription.isEmpty && postController.postName.isEmpty && postController.animalType.isEmpty) {
+                    Get.snackbar("Failed to post", "Please fill up all the fields");
                   } else {
-                    await postController.uploadImageFile();
+                    await postController.createPost();
                     Get.snackbar("Congratulations", "Post created successfully");
                     Get.offNamed(HomeView.id);
                   }

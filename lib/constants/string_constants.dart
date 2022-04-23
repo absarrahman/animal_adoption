@@ -8,7 +8,7 @@ class RoleConstants {
 }
 
 class ModelConstants {
-  static const uuid = "id";
+  static const uuid = "uuid";
   static const name = "name";
   static const email = "email";
   static const role = "role";

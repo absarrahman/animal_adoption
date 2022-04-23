@@ -74,13 +74,10 @@ class FirebaseAPI {
   }
 
   static Future<String?> addDataAndGetDocID({required String collectionPath, required Map<String, dynamic> json}) async {
-    String? docID;
     try {
-      _fireStore.collection(collectionPath).add(json).then((value) {
-        docID = value.id;
-      });
-      log("Successfully added");
-      return docID;
+      final doc = await _fireStore.collection(collectionPath).add(json);
+      log("Successfully added ${doc.id}");
+      return doc.id;
     } catch (e) {
       log("Failed to add data ${e.toString()}");
       return null;
@@ -99,7 +96,7 @@ class FirebaseAPI {
   }
 
   //Update
-  static Future<void> updateData({required String collectionPath, required String uID, required Map<String, dynamic> newJsonData}) async {
+  static Future<void> updateData({required String collectionPath, String? uID, required Map<String, dynamic> newJsonData}) async {
     try {
       await _fireStore.collection(collectionPath).doc(uID).update(newJsonData);
       log("Successfully updated");
@@ -116,11 +113,13 @@ class FirebaseAPI {
 
   // Upload file
 
-  static Future<void> uploadFile({required Uint8List bytes, required String fileName, required String refPath}) async {
+  static Future<String?> uploadFile({required Uint8List bytes, required String fileName, required String refPath}) async {
     try {
-      await _storage.ref("$refPath/$fileName").putData(bytes);
+      TaskSnapshot imageData = await _storage.ref("$refPath/$fileName").putData(bytes);
+      return imageData.ref.getDownloadURL();
     } catch (e) {
       log("Error occurred $e");
+      return null;
     }
   }
 }
