@@ -112,8 +112,7 @@ class HomeView extends StatelessWidget {
                             return AdoptionPostWidget(
                               postDesciption: adoptionPost[ModelConstants.postDescription],
                               createdAt: adoptionPost[ModelConstants.createdAt],
-                              imageUrl:
-                                  "https://media.istockphoto.com/photos/european-short-haired-cat-picture-id1072769156?k=20&m=1072769156&s=612x612&w=0&h=k6eFXtE7bpEmR2ns5p3qe_KYh098CVLMz4iKm5OuO6Y=",
+                              imageUrl: adoptionPost[ModelConstants.imageUrl],
                               postName: adoptionPost[ModelConstants.postName],
                               userName: snapshot.data![0][ModelConstants.username]!,
                             );
