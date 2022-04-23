@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:animal_adoption/controllers/post_controller.dart';
+import 'package:animal_adoption/views/widgets/common.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -66,6 +67,7 @@ class CreateAdoptionPostView extends StatelessWidget {
                   } else if (postController.postDescription.isEmpty && postController.postName.isEmpty && postController.animalType.isEmpty) {
                     Get.snackbar("Failed to post", "Please fill up all the fields");
                   } else {
+                    CommonWidgets.loadingWidget();
                     await postController.createPost();
                     Get.snackbar("Congratulations", "Post created successfully");
                     Get.offNamed(HomeView.id);
