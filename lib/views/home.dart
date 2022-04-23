@@ -109,12 +109,26 @@ class HomeView extends StatelessWidget {
                           if (snapshot.connectionState == ConnectionState.waiting) {
                             return const CircularProgressIndicator.adaptive();
                           } else if (snapshot.hasData) {
-                            return AdoptionPostWidget(
-                              postDesciption: adoptionPost[ModelConstants.postDescription],
-                              createdAt: adoptionPost[ModelConstants.createdAt],
-                              imageUrl: adoptionPost[ModelConstants.imageUrl],
-                              postName: adoptionPost[ModelConstants.postName],
-                              userName: snapshot.data![0][ModelConstants.username]!,
+                            return InkWell(
+                              onHover: ((value) {}),
+                              onTap: () {
+                                Get.defaultDialog(content:Container(
+                                  color: Colors.white,
+                                  child: Column(
+                                    children: [
+                                      Text(adoptionPost[ModelConstants.postDescription],),
+                                    ],
+                                  ),
+                                ));
+                              },
+                              child: AdoptionPostWidget(
+                                postDesciption: adoptionPost[ModelConstants.postDescription],
+                                createdAt: adoptionPost[ModelConstants.createdAt],
+                                imageUrl: adoptionPost[ModelConstants.imageUrl],
+                                postName: adoptionPost[ModelConstants.postName],
+                                userName: snapshot.data![0][ModelConstants.username]!,
+                                postID: adoptionPost[ModelConstants.uuid],
+                              ),
                             );
                           } else {
                             return const Text("Failed to retrieve data");
