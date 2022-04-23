@@ -89,4 +89,22 @@ class AuthController extends GetxController {
     nid.value = '';
     houseAddress.value = '';
   }
+
+  Future<void> bookAnimal({required String postID}) async {
+    var post = await FirebaseAPI.getCollectionRef(collectionPath: FireStoreConstants.adoptionPosts).doc(postID).get();
+    var currentBookedUid = post.data()![ModelConstants.bookedUuid];
+
+    if (currentBookedUid == null) {
+      await FirebaseAPI.updateData(
+          collectionPath: FireStoreConstants.adoptionPosts,
+          newJsonData: {
+            ModelConstants.bookedUuid: authController.userModel.value!.uuid,
+          },
+          uID: postID);
+      Get.back();
+      Get.snackbar("Congratulations", "Animal booked successfully");
+    } else {
+      Get.snackbar("Failed to book", "Someone already booked it");
+    }
+  }
 }

@@ -7,6 +7,7 @@ class AdoptionPostWidget extends StatelessWidget {
   final String postDesciption;
   final String postName;
   final String userName;
+  final String postID;
   const AdoptionPostWidget({
     Key? key,
     required this.imageUrl,
@@ -14,6 +15,7 @@ class AdoptionPostWidget extends StatelessWidget {
     required this.postDesciption,
     required this.postName,
     required this.userName,
+    required this.postID,
   }) : super(key: key);
 
   @override
@@ -21,13 +23,26 @@ class AdoptionPostWidget extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 5,
-      color: Colors.red,
+      color: const Color(0xffEEEDDE),
       child: Column(
         children: [
-          Image.network(imageUrl,height: Get.width * 0.09, width: Get.width * 0.09,),
+          Image.network(
+            imageUrl,
+            height: Get.width * 0.09,
+            width: Get.width * 0.09,
+          ),
+          // Post name
           Text(postName),
+          // Post username
           Text(userName),
-          Text(postDesciption)
+          // Post description
+          Text(postDesciption),
+          //  POST ID
+          SelectableText(
+            postID,
+            toolbarOptions: const ToolbarOptions(copy: true, selectAll: true),
+            enableInteractiveSelection: true,
+          ),
         ],
       ),
     );

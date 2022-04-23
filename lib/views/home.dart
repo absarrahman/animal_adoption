@@ -20,7 +20,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthController authController = AuthController.authController;
-    log("${authController.userModel.value!.username} ${authController.isLoggedIn.value}");
+    log("${authController.userModel.value!.uuid} ${authController.isLoggedIn.value}");
     return Obx(() {
       return Scaffold(
           drawer: authController.isLoggedIn.value ? const UserDrawerWidget() : null,
@@ -109,12 +109,40 @@ class HomeView extends StatelessWidget {
                           if (snapshot.connectionState == ConnectionState.waiting) {
                             return const CircularProgressIndicator.adaptive();
                           } else if (snapshot.hasData) {
-                            return AdoptionPostWidget(
-                              postDesciption: adoptionPost[ModelConstants.postDescription],
-                              createdAt: adoptionPost[ModelConstants.createdAt],
-                              imageUrl: adoptionPost[ModelConstants.imageUrl],
-                              postName: adoptionPost[ModelConstants.postName],
-                              userName: snapshot.data![0][ModelConstants.username]!,
+                            return InkWell(
+                              onHover: ((value) {}),
+                              onTap: () {
+                                Get.defaultDialog(
+                                    content: Container(
+                                  color: Colors.white,
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        adoptionPost[ModelConstants.postDescription],
+                                      ),
+                                      Visibility(
+                                        visible: isValidUser(adoptionPost, authController),
+                                        child: ElevatedButton(
+                                          onPressed: () async {
+                                            // Book animal
+                                            log("Adopt post ${adoptionPost[ModelConstants.uuid]}");
+                                            await authController.bookAnimal(postID: adoptionPost[ModelConstants.uuid]);
+                                          },
+                                          child: const Text("Book Now"),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ));
+                              },
+                              child: AdoptionPostWidget(
+                                postDesciption: adoptionPost[ModelConstants.postDescription],
+                                createdAt: adoptionPost[ModelConstants.createdAt],
+                                imageUrl: adoptionPost[ModelConstants.imageUrl],
+                                postName: adoptionPost[ModelConstants.postName],
+                                userName: snapshot.data![0][ModelConstants.username]!,
+                                postID: adoptionPost[ModelConstants.uuid],
+                              ),
                             );
                           } else {
                             return const Text("Failed to retrieve data");
@@ -138,6 +166,12 @@ class HomeView extends StatelessWidget {
             },
           ));
     });
+  }
+
+  bool isValidUser(adoptionPost, AuthController authController) {
+    return adoptionPost[ModelConstants.userUuid] != authController.userModel.value!.uuid &&
+        authController.isLoggedIn.value &&
+        adoptionPost[ModelConstants.bookedUuid] == null;
   }
 }
 
