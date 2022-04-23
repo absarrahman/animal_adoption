@@ -20,7 +20,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthController authController = AuthController.authController;
-    log("${authController.userModel.value!.username} ${authController.isLoggedIn.value}");
+    log("${authController.userModel.value!.uuid} ${authController.isLoggedIn.value}");
     return Obx(() {
       return Scaffold(
           drawer: authController.isLoggedIn.value ? const UserDrawerWidget() : null,
@@ -112,11 +112,17 @@ class HomeView extends StatelessWidget {
                             return InkWell(
                               onHover: ((value) {}),
                               onTap: () {
-                                Get.defaultDialog(content:Container(
+                                Get.defaultDialog(
+                                    content: Container(
                                   color: Colors.white,
                                   child: Column(
                                     children: [
-                                      Text(adoptionPost[ModelConstants.postDescription],),
+                                      Text(
+                                        adoptionPost[ModelConstants.postDescription],
+                                      ),
+                                      Visibility(
+                                          visible: isValidUser(adoptionPost, authController),
+                                          child: ElevatedButton(onPressed: () {}, child: const Text("BUTTON"))),
                                     ],
                                   ),
                                 ));
@@ -152,6 +158,10 @@ class HomeView extends StatelessWidget {
             },
           ));
     });
+  }
+
+  bool isValidUser(adoptionPost, AuthController authController) {
+    return adoptionPost[ModelConstants.userUuid] != authController.userModel.value!.uuid && authController.isLoggedIn.value;
   }
 }
 
