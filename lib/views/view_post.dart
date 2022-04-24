@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../constants/string_constants.dart';
 import '../services/firebase_api.dart';
@@ -27,7 +28,10 @@ class ViewPostHistory extends StatelessWidget {
                     itemCount: adoptionPostList.length,
                     itemBuilder: (context, index) {
                       var adoptionPost = adoptionPostList[index].data();
-                      return UserPostObserveWidget(adoptionPost: adoptionPost);
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 30.0),
+                        child: UserPostObserveWidget(adoptionPost: adoptionPost),
+                      );
                     });
               } else if (snapshot.hasError) {
                 return const Text("Something went wrong");
@@ -52,6 +56,22 @@ class UserPostObserveWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(adoptionPost.toString());
+    return SizedBox(
+      height: 70,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          //Image
+          CircleAvatar(
+            radius: 70,
+            foregroundImage: NetworkImage(adoptionPost[ModelConstants.imageUrl]),
+          ),
+          //Post name
+          Text(adoptionPost[ModelConstants.postName]),
+          // Booked UUID
+          Text(adoptionPost[ModelConstants.bookedUuid])
+        ],
+      ),
+    );
   }
 }
