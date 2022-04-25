@@ -9,7 +9,8 @@ class UserModel {
   late String? nid;
   late String? phoneNumber;
   late String? houseAddress;
-  late String? username;
+  late double? totalRateCount;
+  late double? averageRate;
   late String? uuid;
 
   UserModel({
@@ -17,11 +18,12 @@ class UserModel {
     this.name,
     this.email,
     this.rating = 0.0,
-    this.role = RoleConstants.roleGonnAdoptUser,
+    this.role = RoleConstants.user,
     this.phoneNumber,
     this.nid,
     this.houseAddress,
-    this.username,
+    this.averageRate = 0.0,
+    this.totalRateCount = 0.0,
   });
 
   UserModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
@@ -33,6 +35,7 @@ class UserModel {
     rating = snapshot.data()![ModelConstants.userRating];
     phoneNumber = snapshot.data()![ModelConstants.userPhoneNumber];
     houseAddress = snapshot.data()![ModelConstants.userHouseAddress];
-    username = snapshot.data()![ModelConstants.username];
+    averageRate = snapshot.data()![ModelConstants.averageRate];
+    totalRateCount = snapshot.data()![ModelConstants.totalRateCount];
   }
 }

@@ -6,7 +6,6 @@ class AdoptionPostWidget extends StatelessWidget {
   final int createdAt;
   final String postDesciption;
   final String postName;
-  final String userName;
   final String postID;
   const AdoptionPostWidget({
     Key? key,
@@ -14,7 +13,6 @@ class AdoptionPostWidget extends StatelessWidget {
     required this.createdAt,
     required this.postDesciption,
     required this.postName,
-    required this.userName,
     required this.postID,
   }) : super(key: key);
 
@@ -33,8 +31,6 @@ class AdoptionPostWidget extends StatelessWidget {
           ),
           // Post name
           Text(postName),
-          // Post username
-          Text(userName),
           // Post description
           Text(postDesciption),
           //  POST ID

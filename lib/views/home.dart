@@ -140,7 +140,6 @@ class HomeView extends StatelessWidget {
                                 createdAt: adoptionPost[ModelConstants.createdAt],
                                 imageUrl: adoptionPost[ModelConstants.imageUrl],
                                 postName: adoptionPost[ModelConstants.postName],
-                                userName: snapshot.data![0][ModelConstants.username]!,
                                 postID: adoptionPost[ModelConstants.uuid],
                               ),
                             );
