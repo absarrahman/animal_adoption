@@ -100,6 +100,7 @@ class UserPostObserveWidget extends StatelessWidget {
                                         const CircularProgressIndicator.adaptive();
                                         await postController.removeBook(postID: adoptionPost[ModelConstants.uuid]);
                                         Get.back();
+                                        Get.snackbar("Successful", "User has been removed successfully");
                                       },
                                       child: const Text("Reject")),
                               confirm: adoptionPost[ModelConstants.isBooked]
@@ -164,19 +165,12 @@ class UserPostObserveWidget extends StatelessWidget {
                         return const Text("Failed to retrieve data");
                       }
                     })
-                : adoptionPost[ModelConstants.isBooked] == true
-                    ? Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Text("Not booked yet"),
-                      )
-                    : Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Text("Not booked yet"),
-                      ),
+                : Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Text("Not booked yet"),
+                  ),
           ],
         ),
       ),
