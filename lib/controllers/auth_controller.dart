@@ -46,7 +46,7 @@ class AuthController extends GetxController {
           ModelConstants.userPhoneNumber: phoneNumber.value,
           ModelConstants.userNID: nid.value,
           ModelConstants.userHouseAddress: houseAddress.value,
-          ModelConstants.totalRateCount: 0.0,
+          ModelConstants.totalRateCount: 0,
           ModelConstants.averageRate: 0.0,
         },
         password: password.value,

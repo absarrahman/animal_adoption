@@ -15,7 +15,7 @@ class CreateAdoptionPostView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PostController postController = Get.find<PostController>();
+    final PostController postController = PostController.postController;
     return Scaffold(
       body: Center(
         child: Column(

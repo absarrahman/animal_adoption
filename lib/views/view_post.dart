@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:animal_adoption/controllers/post_controller.dart';
+import 'package:animal_adoption/views/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -57,6 +59,8 @@ class UserPostObserveWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    PostController postController = PostController.postController;
+    var userRate = 0.0;
     return SizedBox(
       height: 70,
       child: Center(
@@ -79,71 +83,78 @@ class UserPostObserveWidget extends StatelessWidget {
             // Booked UUID
             // If book user exists, option to reject/accept, else blank/ not booked yet
             adoptionPost[ModelConstants.bookedUuid] != null
-                ? ElevatedButton(
-                    onPressed: (() {
-                      Get.defaultDialog(
-                        title: "User Info",
-                        cancel: ElevatedButton(
-                            onPressed: () {
-                              // Set booked user to null
-                            },
-                            child: const Text("Reject")),
-                        confirm: ElevatedButton(
-                            onPressed: () {
-                              Get.defaultDialog(
-                                  title: "Rate the user",
-                                  content: Column(
-                                    children: [
-                                      const Text("Share your experience with the user"),
-                                      RatingBar.builder(
-                                        initialRating: 3,
-                                        minRating: 1,
-                                        direction: Axis.horizontal,
-                                        allowHalfRating: true,
-                                        itemCount: 5,
-                                        itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                                        itemBuilder: (context, _) => const Icon(
-                                          Icons.star,
-                                          color: Colors.amber,
-                                        ),
-                                        onRatingUpdate: (rating) {
-                                          print(rating);
-                                        },
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          // Set isBooked to true, set the value in db
-                                        },
-                                        child: const Text("Rate"),
-                                      )
-                                    ],
-                                  ));
-                            },
-                            child: const Text("Accept")),
-                        content: FutureBuilder(
-                            future: FirebaseAPI.getCollectionRef(collectionPath: FireStoreConstants.userCollection)
-                                .doc(adoptionPost[ModelConstants.userUuid])
-                                .get(),
-                            builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                              if (snapshot.hasData) {
-                                var data = snapshot.data!;
-                                return Column(
-                                  children: [
-                                    // Email
-                                    Text(data[ModelConstants.email]),
-                                    // Rating
-                                    // if avg rate and totalRateCount = 0, user did not adopt any animals before
-                                    const Text("User average rating"),
-                                  ],
-                                );
-                              } else {
-                                return const Text("Failed to retrieve data");
-                              }
-                            }),
-                      );
-                    }),
-                    child: const Text("Someone booked it. Tap to check"),
-                  )
+                ? FutureBuilder(
+                    future: FirebaseAPI.getCollectionRef(collectionPath: FireStoreConstants.userCollection).doc(adoptionPost[ModelConstants.bookedUuid]).get(),
+                    builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                      if (snapshot.hasData) {
+                        var userData = snapshot.data!;
+                        return ElevatedButton(
+                          onPressed: (() {
+                            Get.defaultDialog(
+                              title: "User Info",
+                              cancel: ElevatedButton(
+                                  onPressed: () {
+                                    // Set booked user to null
+                                  },
+                                  child: const Text("Reject")),
+                              confirm: ElevatedButton(
+                                  onPressed: () {
+                                    Get.defaultDialog(
+                                        title: "Rate the user",
+                                        content: Column(
+                                          children: [
+                                            const Text("Share your experience with the user"),
+                                            RatingBar.builder(
+                                              initialRating: 3,
+                                              minRating: 1,
+                                              direction: Axis.horizontal,
+                                              allowHalfRating: true,
+                                              itemCount: 5,
+                                              itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                              itemBuilder: (context, _) => const Icon(
+                                                Icons.star,
+                                                color: Colors.amber,
+                                              ),
+                                              onRatingUpdate: (rating) {
+                                                userRate = rating;
+                                                log("userRate $userRate");
+                                              },
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () async {
+                                                // Set isBooked to true, set the value in db
+                                                log("User data ${userData.data()}");
+                                                await postController.confirmBook(
+                                                    userUUID: adoptionPost[ModelConstants.bookedUuid],
+                                                    newRate: userRate,
+                                                    oldAverage: userData[ModelConstants.averageRate],
+                                                    postID: adoptionPost[ModelConstants.uuid],
+                                                    totalRateCount: userData[ModelConstants.totalRateCount]);
+                                                Get.offAllNamed(HomeView.id);
+                                              },
+                                              child: const Text("Rate"),
+                                            )
+                                          ],
+                                        ));
+                                  },
+                                  child: const Text("Accept")),
+                              content: Column(
+                                children: [
+                                  // Email
+                                  Text(userData[ModelConstants.email]),
+                                  // Rating
+                                  // if avg rate and totalRateCount = 0, user did not adopt any animals before
+                                  const Text("User average rating"),
+                                ],
+                              ),
+                            );
+                          }),
+                          child: const Text("Someone booked it. Tap to check"),
+                        );
+                      } else {
+                        return const Text("Failed to retrieve data");
+                      }
+                    })
                 : Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),

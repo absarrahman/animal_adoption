@@ -7,7 +7,7 @@ import 'package:animal_adoption/services/firebase_api.dart';
 import 'package:get/get.dart';
 
 class PostController extends GetxController {
-  static final PostController homeController = Get.find<PostController>();
+  static final PostController postController = Get.find<PostController>();
 
   Rx<String> fileName = "".obs;
   late Uint8List imageBytes;
@@ -35,5 +35,32 @@ class PostController extends GetxController {
     });
     log("Doc id is $docID");
     await FirebaseAPI.updateData(collectionPath: FireStoreConstants.adoptionPosts, uID: docID, newJsonData: {ModelConstants.uuid: docID});
+  }
+
+  Future<void> confirmBook(
+      {required String userUUID, required double newRate, required String postID, required double oldAverage, required int totalRateCount}) async {
+    try {
+      double newAverage = _calculateAverage(newRate: newRate, oldAverage: oldAverage, totalRateCount: totalRateCount);
+      await FirebaseAPI.updateData(collectionPath: FireStoreConstants.adoptionPosts, newJsonData: {ModelConstants.isBooked: true}, uID: postID);
+      await FirebaseAPI.updateData(
+          collectionPath: FireStoreConstants.userCollection,
+          newJsonData: {
+            ModelConstants.averageRate: newAverage,
+            ModelConstants.totalRateCount: totalRateCount + 1,
+          },
+          uID: userUUID);
+    } catch (e) {
+      Get.snackbar("Something went wrong", "Failed to confirm booking");
+    }
+  }
+
+  double _calculateAverage({required double newRate, required double oldAverage, required int totalRateCount}) {
+    //newAve = ((oldAve*oldNumPoints) + x)/(oldNumPoints+1) https://stackoverflow.com/questions/3998780/general-is-there-a-way-to-calculate-an-average-based-off-of-an-existing-averag
+    log("User old average $oldAverage total rate $totalRateCount newRate $newRate");
+    double totalValue = (oldAverage * totalRateCount) + newRate;
+    double newCount = totalRateCount + 1;
+    double newAverage = totalValue / newCount;
+    log("New average = $newAverage total value $totalValue new cOunt $newCount");
+    return newAverage;
   }
 }
