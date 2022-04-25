@@ -1,4 +1,6 @@
 import 'package:animal_adoption/views/admin/admin_panel.dart';
+import 'package:animal_adoption/views/admin/report_panel.dart';
+import 'package:animal_adoption/views/admin/user_list_panel.dart';
 import 'package:animal_adoption/views/auth/login_view.dart';
 import 'package:animal_adoption/views/auth/register_view.dart';
 import 'package:animal_adoption/views/users/create_post.dart';
@@ -16,5 +18,7 @@ class AppRoutes {
     GetPage(name: CreateAdoptionPostView.id, page: () => const CreateAdoptionPostView()),
     GetPage(name: ViewPostHistory.id, page: () => const ViewPostHistory()),
     GetPage(name: AdminPanelView.id, page: () => const AdminPanelView()),
+    GetPage(name: ReportPanelView.id, page: () => const ReportPanelView()),
+    GetPage(name: UserPanelListView.id, page: () => const UserPanelListView()),
   ];
 }

@@ -210,7 +210,8 @@ class UserDrawerWidget extends StatelessWidget {
               builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                 if (snapshot.hasData) {
                   var userData = snapshot.data!;
-                  return userData[ModelConstants.role] == RoleConstants.roleIsAdmin
+                  AuthController.authController.isAdmin.value = userData[ModelConstants.role] == RoleConstants.roleIsAdmin;
+                  return AuthController.authController.isAdmin.value
                       ? TextButton(
                           onPressed: () {
                             Get.toNamed(AdminPanelView.id);
