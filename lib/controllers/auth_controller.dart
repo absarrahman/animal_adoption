@@ -20,6 +20,7 @@ class AuthController extends GetxController {
   Rx<UserModel?> userModel = UserModel().obs;
   late Rx<User?> firebaseUser;
   var isLoggedIn = false.obs;
+  var isAdmin = false.obs;
 
   @override
   void onReady() async {
@@ -103,6 +104,15 @@ class AuthController extends GetxController {
       Get.snackbar("Congratulations", "Animal booked successfully");
     } else {
       Get.snackbar("Failed to book", "Someone already booked it");
+    }
+  }
+
+  Future<void> removeUser({required String uuid}) async {
+    try {
+      await FirebaseAPI.removeData(uID: uuid, collectionPath: FireStoreConstants.userCollection);
+      Get.back();
+    } catch (e) {
+      Get.snackbar("Something went wrong", "Failed to remove");
     }
   }
 }

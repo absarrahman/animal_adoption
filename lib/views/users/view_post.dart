@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:animal_adoption/controllers/auth_controller.dart';
 import 'package:animal_adoption/controllers/post_controller.dart';
 import 'package:animal_adoption/views/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
-import '../constants/string_constants.dart';
-import '../services/firebase_api.dart';
+import '../../constants/string_constants.dart';
+import '../../services/firebase_api.dart';
 
 class ViewPostHistory extends StatelessWidget {
   const ViewPostHistory({Key? key}) : super(key: key);
@@ -16,34 +17,37 @@ class ViewPostHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AuthController authController = AuthController.authController;
     return Scaffold(
       body: Center(
-        child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-            stream: FirebaseAPI.getCollectionRef(collectionPath: FireStoreConstants.adoptionPosts)
-                .where('userUuid', isEqualTo: FirebaseAPI.firebaseAuth.currentUser!.uid)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                log(FirebaseAPI.firebaseAuth.currentUser!.uid);
-                List adoptionPostList = snapshot.data!.docs.toList();
-                log("${adoptionPostList.length}");
-                return ListView.builder(
-                    itemCount: adoptionPostList.length,
-                    itemBuilder: (context, index) {
-                      var adoptionPost = adoptionPostList[index].data();
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 30.0),
-                        child: UserPostObserveWidget(adoptionPost: adoptionPost),
-                      );
-                    });
-              } else if (snapshot.hasError) {
-                return const Text("Something went wrong");
-              } else if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator.adaptive());
-              } else {
-                return const Text("Please try again");
-              }
-            }),
+        child: authController.isLoggedIn.value
+            ? StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: FirebaseAPI.getCollectionRef(collectionPath: FireStoreConstants.adoptionPosts)
+                    .where('userUuid', isEqualTo: FirebaseAPI.firebaseAuth.currentUser!.uid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    log(FirebaseAPI.firebaseAuth.currentUser!.uid);
+                    List adoptionPostList = snapshot.data!.docs.toList();
+                    log("${adoptionPostList.length}");
+                    return ListView.builder(
+                        itemCount: adoptionPostList.length,
+                        itemBuilder: (context, index) {
+                          var adoptionPost = adoptionPostList[index].data();
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 30.0),
+                            child: UserPostObserveWidget(adoptionPost: adoptionPost),
+                          );
+                        });
+                  } else if (snapshot.hasError) {
+                    return const Text("Something went wrong");
+                  } else if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator.adaptive());
+                  } else {
+                    return const Text("Please try again");
+                  }
+                })
+            : const Text("Unauthorized access"),
       ),
     );
   }
