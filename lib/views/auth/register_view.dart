@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:animal_adoption/constants/string_constants.dart';
 import 'package:animal_adoption/controllers/auth_controller.dart';
 import 'package:animal_adoption/views/widgets/common.dart';
 import 'package:flutter/material.dart';
@@ -81,8 +80,18 @@ class RegisterView extends StatelessWidget {
           ),
           ElevatedButton(
               onPressed: () async {
-                CommonWidgets.loadingWidget();
-                await authController.signUp();
+                if (authController.email.value.isNotEmpty &&
+                    authController.email.value.isEmail &&
+                    authController.password.value.isNotEmpty &&
+                    authController.name.value.isNotEmpty &&
+                    authController.houseAddress.value.isNotEmpty &&
+                    authController.phoneNumber.value.isNotEmpty &&
+                    authController.nid.value.isNotEmpty) {
+                  CommonWidgets.loadingWidget();
+                  await authController.signUp();
+                } else {
+                  Get.snackbar("Failed", "Fillup all the inputs using valid data");
+                }
               },
               child: const Text("Signup"))
         ],
