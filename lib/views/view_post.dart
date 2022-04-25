@@ -92,59 +92,65 @@ class UserPostObserveWidget extends StatelessWidget {
                           onPressed: (() {
                             Get.defaultDialog(
                               title: "User Info",
-                              cancel: ElevatedButton(
-                                  onPressed: () {
-                                    // Set booked user to null
-                                  },
-                                  child: const Text("Reject")),
-                              confirm: ElevatedButton(
-                                  onPressed: () {
-                                    Get.defaultDialog(
-                                        title: "Rate the user",
-                                        content: Column(
-                                          children: [
-                                            const Text("Share your experience with the user"),
-                                            RatingBar.builder(
-                                              initialRating: 3,
-                                              minRating: 1,
-                                              direction: Axis.horizontal,
-                                              allowHalfRating: true,
-                                              itemCount: 5,
-                                              itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                                              itemBuilder: (context, _) => const Icon(
-                                                Icons.star,
-                                                color: Colors.amber,
-                                              ),
-                                              onRatingUpdate: (rating) {
-                                                userRate = rating;
-                                                log("userRate $userRate");
-                                              },
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: () async {
-                                                // Set isBooked to true, set the value in db
-                                                log("User data ${userData.data()}");
-                                                await postController.confirmBook(
-                                                    userUUID: adoptionPost[ModelConstants.bookedUuid],
-                                                    newRate: userRate,
-                                                    oldAverage: userData[ModelConstants.averageRate],
-                                                    postID: adoptionPost[ModelConstants.uuid],
-                                                    totalRateCount: userData[ModelConstants.totalRateCount]);
-                                                Get.offAllNamed(HomeView.id);
-                                              },
-                                              child: const Text("Rate"),
-                                            )
-                                          ],
-                                        ));
-                                  },
-                                  child: const Text("Accept")),
+                              cancel: adoptionPost[ModelConstants.isBooked]
+                                  ? null
+                                  : ElevatedButton(
+                                      onPressed: () {
+                                        // Set booked user to null
+                                      },
+                                      child: const Text("Reject")),
+                              confirm: adoptionPost[ModelConstants.isBooked]
+                                  ? const Text("Already assigned to the user")
+                                  : ElevatedButton(
+                                      onPressed: () {
+                                        Get.defaultDialog(
+                                            title: "Rate the user",
+                                            content: Column(
+                                              children: [
+                                                const Text("Share your experience with the user"),
+                                                RatingBar.builder(
+                                                  initialRating: 3,
+                                                  minRating: 1,
+                                                  direction: Axis.horizontal,
+                                                  allowHalfRating: true,
+                                                  itemCount: 5,
+                                                  itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                                  itemBuilder: (context, _) => const Icon(
+                                                    Icons.star,
+                                                    color: Colors.amber,
+                                                  ),
+                                                  onRatingUpdate: (rating) {
+                                                    userRate = rating;
+                                                    log("userRate $userRate");
+                                                  },
+                                                ),
+                                                ElevatedButton(
+                                                  onPressed: () async {
+                                                    // Set isBooked to true, set the value in db
+                                                    log("User data ${userData.data()}");
+                                                    await postController.confirmBook(
+                                                        userUUID: adoptionPost[ModelConstants.bookedUuid],
+                                                        newRate: userRate,
+                                                        oldAverage: userData[ModelConstants.averageRate],
+                                                        postID: adoptionPost[ModelConstants.uuid],
+                                                        totalRateCount: userData[ModelConstants.totalRateCount]);
+                                                    Get.offAllNamed(HomeView.id);
+                                                  },
+                                                  child: const Text("Rate"),
+                                                )
+                                              ],
+                                            ));
+                                      },
+                                      child: const Text("Accept")),
                               content: Column(
                                 children: [
                                   // Email
                                   Text(userData[ModelConstants.email]),
                                   // Rating
                                   // if avg rate and totalRateCount = 0, user did not adopt any animals before
-                                  const Text("User average rating"),
+                                  Text(userData[ModelConstants.totalRateCount] == 0
+                                      ? "This user never booked any animals"
+                                      : "User average rating: ${userData[ModelConstants.averageRate].toStringAsFixed(2)}"),
                                 ],
                               ),
                             );
@@ -155,12 +161,19 @@ class UserPostObserveWidget extends StatelessWidget {
                         return const Text("Failed to retrieve data");
                       }
                     })
-                : Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Text("Not booked yet"),
-                  ),
+                : adoptionPost[ModelConstants.isBooked] == true
+                    ? Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Text("Not booked yet"),
+                      )
+                    : Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Text("Not booked yet"),
+                      ),
           ],
         ),
       ),
