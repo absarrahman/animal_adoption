@@ -26,6 +26,7 @@ class PostController extends GetxController {
     String? docID = await FirebaseAPI.addDataAndGetDocID(collectionPath: FireStoreConstants.adoptionPosts, json: {
       ModelConstants.animalType: animalType.value,
       ModelConstants.bookedUuid: null,
+      ModelConstants.isBooked: false,
       ModelConstants.createdAt: DateTime.now().microsecondsSinceEpoch,
       ModelConstants.postDescription: postDescription.value,
       ModelConstants.postName: postName.value,
