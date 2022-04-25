@@ -38,7 +38,6 @@ class UserPanelListView extends StatelessWidget {
                                   confirm: ElevatedButton(
                                     onPressed: () async {
                                       await AuthController.authController.removeUser(uuid: user[ModelConstants.uuid]);
-                                      Get.back();
                                     },
                                     child: const Text("Yes"),
                                   ),

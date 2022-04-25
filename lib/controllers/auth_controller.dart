@@ -110,6 +110,7 @@ class AuthController extends GetxController {
   Future<void> removeUser({required String uuid}) async {
     try {
       await FirebaseAPI.removeData(uID: uuid, collectionPath: FireStoreConstants.userCollection);
+      Get.back();
     } catch (e) {
       Get.snackbar("Something went wrong", "Failed to remove");
     }
