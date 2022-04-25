@@ -91,33 +91,33 @@ class UserPostObserveWidget extends StatelessWidget {
                         confirm: ElevatedButton(
                             onPressed: () {
                               Get.defaultDialog(
-                                title: "Rate the user",
+                                  title: "Rate the user",
                                   content: Column(
-                                children: [
-                                  const Text("Share your experience with the user"),
-                                  RatingBar.builder(
-                                    initialRating: 3,
-                                    minRating: 1,
-                                    direction: Axis.horizontal,
-                                    allowHalfRating: true,
-                                    itemCount: 5,
-                                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                                    itemBuilder: (context, _) => const Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                    ),
-                                    onRatingUpdate: (rating) {
-                                      print(rating);
-                                    },
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      // Set isBooked to true, set the value in db
-                                    },
-                                    child: const Text("Rate"),
-                                  )
-                                ],
-                              ));
+                                    children: [
+                                      const Text("Share your experience with the user"),
+                                      RatingBar.builder(
+                                        initialRating: 3,
+                                        minRating: 1,
+                                        direction: Axis.horizontal,
+                                        allowHalfRating: true,
+                                        itemCount: 5,
+                                        itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                        itemBuilder: (context, _) => const Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                        ),
+                                        onRatingUpdate: (rating) {
+                                          print(rating);
+                                        },
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          // Set isBooked to true, set the value in db
+                                        },
+                                        child: const Text("Rate"),
+                                      )
+                                    ],
+                                  ));
                             },
                             child: const Text("Accept")),
                         content: FutureBuilder(
