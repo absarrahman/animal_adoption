@@ -15,25 +15,32 @@ class CreateAdoptionPostView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PostController postController = Get.find<PostController>();
+    final PostController postController = PostController.postController;
     return Scaffold(
       body: Center(
         child: Column(
           children: [
             // Post Name
             TextField(
+              decoration: const InputDecoration(hintText: "Post name"),
               onChanged: (val) {
                 postController.postName.value = val;
               },
             ),
             // Post description
-            TextField(
-              onChanged: (val) {
-                postController.postDescription.value = val;
-              },
+            SizedBox(
+              height: Get.height * 0.5,
+              child: TextField(
+                maxLines: 99999999,
+                decoration: const InputDecoration(hintText: "Post description"),
+                onChanged: (val) {
+                  postController.postDescription.value = val;
+                },
+              ),
             ),
             // Animal type
             TextField(
+              decoration: const InputDecoration(hintText: "Animal type"),
               onChanged: (val) {
                 postController.animalType.value = val;
               },
@@ -60,7 +67,7 @@ class CreateAdoptionPostView extends StatelessWidget {
                 child: Text(postController.fileName.value.isEmpty ? "Select file" : postController.fileName.value),
               );
             }),
-            TextButton(
+            ElevatedButton(
                 onPressed: () async {
                   if (postController.fileName.value.isEmpty) {
                     Get.snackbar("Image not selected", "Please select an image before uploading");
