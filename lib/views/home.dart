@@ -115,6 +115,7 @@ class HomeView extends StatelessWidget {
                               onHover: ((value) {}),
                               onTap: () {
                                 Get.defaultDialog(
+                                  title: adoptionPost[ModelConstants.postName],
                                     content: Container(
                                   color: Colors.white,
                                   child: Column(
@@ -138,7 +139,7 @@ class HomeView extends StatelessWidget {
                                 ));
                               },
                               child: AdoptionPostWidget(
-                                postDesciption: adoptionPost[ModelConstants.postDescription],
+                                animalType: adoptionPost[ModelConstants.animalType],
                                 createdAt: adoptionPost[ModelConstants.createdAt],
                                 imageUrl: adoptionPost[ModelConstants.imageUrl],
                                 postName: adoptionPost[ModelConstants.postName],

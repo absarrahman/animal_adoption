@@ -19,6 +19,10 @@ class CreateAdoptionPostView extends StatelessWidget {
     final PostController postController = PostController.postController;
     final AuthController authController = AuthController.authController;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Create your post"),
+        centerTitle: true,
+      ),
       body: Center(
         child: authController.isLoggedIn.value
             ? Column(

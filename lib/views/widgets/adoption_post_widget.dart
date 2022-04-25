@@ -4,14 +4,14 @@ import 'package:get/get.dart';
 class AdoptionPostWidget extends StatelessWidget {
   final String imageUrl;
   final int createdAt;
-  final String postDesciption;
+  final String animalType;
   final String postName;
   final String postID;
   const AdoptionPostWidget({
     Key? key,
     required this.imageUrl,
     required this.createdAt,
-    required this.postDesciption,
+    required this.animalType,
     required this.postName,
     required this.postID,
   }) : super(key: key);
@@ -30,15 +30,13 @@ class AdoptionPostWidget extends StatelessWidget {
             width: Get.width * 0.09,
           ),
           // Post name
-          Text(postName),
-          // Post description
-          Text(postDesciption),
-          //  POST ID
-          SelectableText(
-            postID,
-            toolbarOptions: const ToolbarOptions(copy: true, selectAll: true),
-            enableInteractiveSelection: true,
-          ),
+          ListTile(title: Text(postName),subtitle: Text(animalType),),
+          
+          // SelectableText(
+          //   postID,
+          //   toolbarOptions: const ToolbarOptions(copy: true, selectAll: true),
+          //   enableInteractiveSelection: true,
+          // ),
         ],
       ),
     );
