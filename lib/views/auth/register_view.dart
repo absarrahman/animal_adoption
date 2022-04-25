@@ -15,6 +15,10 @@ class RegisterView extends StatelessWidget {
     final authController = AuthController.authController;
     log(authController.isLoggedIn.value.toString());
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Sign up"),
+        centerTitle: true,
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -77,6 +81,9 @@ class RegisterView extends StatelessWidget {
             onChanged: (value) {
               authController.nid.value = value;
             },
+          ),
+          const SizedBox(
+            height: 10,
           ),
           ElevatedButton(
               onPressed: () async {

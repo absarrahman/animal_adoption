@@ -19,6 +19,10 @@ class ViewPostHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     AuthController authController = AuthController.authController;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("View your post"),
+        centerTitle: true,
+      ),
       body: Center(
         child: authController.isLoggedIn.value
             ? StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
@@ -30,7 +34,7 @@ class ViewPostHistory extends StatelessWidget {
                     log(FirebaseAPI.firebaseAuth.currentUser!.uid);
                     List adoptionPostList = snapshot.data!.docs.toList();
                     log("${adoptionPostList.length}");
-                    return ListView.builder(
+                    return adoptionPostList.isEmpty?const Text("You have not post anything yet") : ListView.builder(
                         itemCount: adoptionPostList.length,
                         itemBuilder: (context, index) {
                           var adoptionPost = adoptionPostList[index].data();
