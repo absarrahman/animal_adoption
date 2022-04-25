@@ -4,6 +4,7 @@ import 'package:animal_adoption/constants/string_constants.dart';
 import 'package:animal_adoption/controllers/auth_controller.dart';
 import 'package:animal_adoption/views/widgets/common.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class RegisterView extends StatelessWidget {
@@ -27,13 +28,13 @@ class RegisterView extends StatelessWidget {
               authController.email.value = value;
             },
           ),
-          // User name
+          // Full name
           TextField(
             decoration: const InputDecoration(
-              hintText: "Enter username",
+              hintText: "Enter fullname",
             ),
             onChanged: (value) {
-              authController.userName.value = value;
+              authController.name.value = value;
             },
           ),
           // Password
@@ -56,8 +57,21 @@ class RegisterView extends StatelessWidget {
               authController.houseAddress.value = value;
             },
           ),
+          // Phone Number
+          TextField(
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            decoration: const InputDecoration(
+              hintText: "Enter phone number",
+            ),
+            onChanged: (value) {
+              authController.phoneNumber.value = value;
+            },
+          ),
           // Nid
           TextField(
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             decoration: const InputDecoration(
               hintText: "Enter NID",
             ),
@@ -65,22 +79,6 @@ class RegisterView extends StatelessWidget {
               authController.nid.value = value;
             },
           ),
-          Obx(() {
-            return DropdownButton(
-                value: authController.role.value,
-                items: [
-                  RoleConstants.roleMaps[RoleConstants.roleAdoptPostPetUser],
-                  RoleConstants.roleMaps[RoleConstants.roleGonnAdoptUser],
-                ]
-                    .map((value) => DropdownMenuItem(
-                          child: Text(value!),
-                          value: value,
-                        ))
-                    .toList(),
-                onChanged: (String? value) {
-                  authController.role.value = value!;
-                });
-          }),
           ElevatedButton(
               onPressed: () async {
                 CommonWidgets.loadingWidget();

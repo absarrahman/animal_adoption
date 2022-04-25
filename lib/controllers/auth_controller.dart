@@ -13,10 +13,8 @@ class AuthController extends GetxController {
   static final AuthController authController = Get.find<AuthController>();
   Rx<String> email = "".obs;
   Rx<String> name = "".obs;
-  Rx<String> userName = "".obs;
   Rx<String> password = "".obs;
   Rx<String> houseAddress = "".obs;
-  Rx<String> role = RoleConstants.roleMaps[RoleConstants.roleAdoptPostPetUser]!.obs;
   Rx<String> nid = "".obs;
   Rx<String> phoneNumber = "".obs;
   Rx<UserModel?> userModel = UserModel().obs;
@@ -39,17 +37,17 @@ class AuthController extends GetxController {
   }
 
   Future<void> signUp() async {
-    log("ROLE IS ${role.value}");
     try {
       userModel.value = await FirebaseAPI.signUp(
         userJSON: {
           ModelConstants.email: email.value,
-          ModelConstants.role: RoleConstants.roleMaps.keys.firstWhere((element) => RoleConstants.roleMaps[element] == role.value),
+          ModelConstants.role: RoleConstants.user,
           ModelConstants.name: name.value,
           ModelConstants.userPhoneNumber: phoneNumber.value,
           ModelConstants.userNID: nid.value,
           ModelConstants.userHouseAddress: houseAddress.value,
-          ModelConstants.username: userName.value,
+          ModelConstants.totalRateCount: 0.0,
+          ModelConstants.averageRate: 0.0,
         },
         password: password.value,
         collectionPath: FireStoreConstants.userCollection,
