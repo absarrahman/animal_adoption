@@ -63,4 +63,18 @@ class PostController extends GetxController {
     log("New average = $newAverage total value $totalValue new cOunt $newCount");
     return newAverage;
   }
+
+  Future<void> removeBook({required String postID}) async {
+    try {
+      await FirebaseAPI.updateData(
+          collectionPath: FireStoreConstants.adoptionPosts,
+          newJsonData: {
+            ModelConstants.isBooked: false,
+            ModelConstants.bookedUuid: null,
+          },
+          uID: postID);
+    } catch (e) {
+      Get.snackbar("Something went wrong", "Failed to remove booking. Please try again");
+    }
+  }
 }

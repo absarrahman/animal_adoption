@@ -95,8 +95,11 @@ class UserPostObserveWidget extends StatelessWidget {
                               cancel: adoptionPost[ModelConstants.isBooked]
                                   ? null
                                   : ElevatedButton(
-                                      onPressed: () {
+                                      onPressed: () async {
                                         // Set booked user to null
+                                        const CircularProgressIndicator.adaptive();
+                                        await postController.removeBook(postID: adoptionPost[ModelConstants.uuid]);
+                                        Get.back();
                                       },
                                       child: const Text("Reject")),
                               confirm: adoptionPost[ModelConstants.isBooked]
