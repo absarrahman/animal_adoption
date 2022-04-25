@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:animal_adoption/views/admin/admin_panel.dart';
 import 'package:animal_adoption/views/users/create_post.dart';
 import 'package:animal_adoption/views/users/view_post.dart';
 import 'package:animal_adoption/views/widgets/adoption_post_widget.dart';
@@ -182,8 +183,12 @@ class UserDrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final uuid = AuthController.authController.userModel.value!.uuid!;
+
     return Drawer(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           //For creating post
           TextButton(
@@ -200,6 +205,22 @@ class UserDrawerWidget extends StatelessWidget {
               Get.toNamed(ViewPostHistory.id);
             },
           ),
+          FutureBuilder(
+              future: FirebaseAPI.getCollectionRef(collectionPath: FireStoreConstants.userCollection).doc(uuid).get(),
+              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (snapshot.hasData) {
+                  var userData = snapshot.data!;
+                  return userData[ModelConstants.role] == RoleConstants.roleIsAdmin
+                      ? TextButton(
+                          onPressed: () {
+                            Get.toNamed(AdminPanelView.id);
+                          },
+                          child: const Text("Admin panel"))
+                      : Container();
+                } else {
+                  return Container();
+                }
+              })
         ],
       ),
     );
